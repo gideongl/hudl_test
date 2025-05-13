@@ -1,10 +1,11 @@
-1. URL state parameter, assuming it's for CSRF protection, but details of testing seem outside current testing scope, given time constraints and documentation provided
-2. Empty email/password submission attempt error messages aren't accessible to me in the page source so will check that the page doesn't navigate to the password input step or logged in pages but cannot check error text explicitly
-3. Edit link in the username field when in password entry phase isn't locatable by me using standard Selenium Methods, haven't added test cases for its function
-4. Lots of hidden objects in the page source that are not immediately comprehensible to me, so will not attempt to test around those things
-5. Incorrect email and incorrect password do not produce the same error message. This might be useful for people attempting hacking of the site...
-6. Script Injection check?
+1. URL state parameter, assuming it's for CSRF protection, but details of testing seem outside current testing scope given time constraints and documentation provided
+2. Lots of hidden objects in the page source that are not immediately comprehensible to me, so will not attempt to test around those things
+3. Incorrect email and incorrect password do not produce the same error message. This might be useful for people attempting hacking of the site...
+4. Script Injection check?
 
 
-run with command from hudl_test folder
-python3 -m unittest tests.login_tests.TestLogin.test_login_with_valid_user
+run single tests with following command from hudl_test folder
+$   python3 -m unittest tests.login_tests.TestLogin.test_login_with_valid_user
+
+run full suite with html report resulting from the tests subfolder with the following command
+$   pytest --html=./reports/report.html login_tests.py

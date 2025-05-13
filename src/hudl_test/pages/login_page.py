@@ -45,6 +45,20 @@ class LoginPage (object):
         #find the element and click it
         self.driver.find_element(*self.locator.CONTINUE_BUTTON).click()
 
+    #Method to access and select the Edit Email Button on the Enter Password phase of the login flow
+    def edit_email(self):
+        #fill out the username
+        self.fill_username(VALID_EMAIL_NONUSERNAME)
+        #click the continue button
+        self.click_continue_button()
+        #wait for the edit email element to be present
+        self.wait_for_element(self.locator.EDIT_EMAIL_LINK)
+        #click the edit link to edit previously entered email/username
+        self.driver.find_element(*self.locator.EDIT_EMAIL_LINK).click()
+        #wait for the element to be present
+        self.wait_for_element(self.locator.EMAIL_FIELD)
+
+
     # Method to attempt login
     def login(self, username, password):
         #fill out the username
@@ -102,31 +116,35 @@ class LoginPage (object):
         return self.driver.find_element(*self.locator.PASSWORD_FIELD_ERROR).text
     
     
-    # TODO Method to get the error message for a missing username field upon submission
+    # Method to get the error message for a missing username field upon submission
     def empty_username_field_error(self):
         #fill out the username with an invalid email address
+        username_field = self.driver.find_element(*self.locator.EMAIL_FIELD)
         self.fill_username('')
         #click the continue button
         self.click_continue_button()
         #wait for the element to be present
         self.wait_for_element(self.locator.CONTINUE_BUTTON)
-        #find the element and return the text of error, still TODO
-#        return self.driver.find_element(*self.locator.MISSING_USERNAME_FIELD_ERROR).text
+        #find the element and return the text of error
+        validation_message = username_field.get_attribute("validationMessage");
+        return validation_message
 
-    # TODO Method to get the error message for a missing password field upon submission
+    # Method to get the error message for a missing password field upon submission
     def empty_password_field_error(self):
         #fill out the username with an invalid email address
         self.fill_username(VALID_USERNAME) 
         #click the continue button
         self.click_continue_button()
         #fill resulting password field with an invalid password
+        password_field = self.driver.find_element(*self.locator.PASSWORD_FIELD)
         self.fill_password('')
         #click the continue button
         self.click_continue_button()
         #wait for the element to be present
         self.wait_for_element(self.locator.CONTINUE_BUTTON)
-        #find the element and return the text of error, still TODO
-#        return self.driver.find_element(*self.locator.MISSING_PASSWORD_FIELD_ERROR).text
+        #find the element and return the text of error
+        validation_message = password_field.get_attribute("validationMessage");
+        return validation_message
     
 
     # Method to click the create account link (https://identity.hudl.com/u/signup/identifier?)

@@ -62,29 +62,38 @@ class TestLogin(BaseTest):
         # present in the result. If present, the test passes.
         self.assertIn("Your email or password is incorrect. Try again.", result)
 
-    # Test for login attempt with empty username field. TODO: Implement error message check, instead of just checking that no navigation occurs.
+    # Test for login attempt with empty username field. 
     def test_login_with_empty_username(self):
         # Initialize a LoginPage object with the self.driver attribute
         login_page = LoginPage(self.driver)
         
         # Call the login_with_valid_user method on the login_page object
-        login_page.empty_username_field_error()
+        result = login_page.empty_username_field_error()
         
-        # Use self.assertIn to check if the string "logged-in-successfully"
-        # is present in the current URL of the driver. If present, the test passes.
-        self.assertIn("https://identity.hudl.com/u/login/identifier?", self.driver.current_url)
+        # Use self.assertIn to check the field validation error message returned is as expected
+        self.assertIn("Please fill in this field.", result)
 
-    # Test for login attempt with empty password field. TODO: Implement error message check, instead of just checking that no navigation occurs.
+    # Test for login attempt with empty password field.
     def test_login_with_empty_password(self):
         # Initialize a LoginPage object with the self.driver attribute
         login_page = LoginPage(self.driver)
         
         # Call the login_with_valid_user method on the login_page object
-        login_page.empty_password_field_error()
+        result = login_page.empty_password_field_error()
         
-        # Use self.assertIn to check if the string "logged-in-successfully"
-        # is present in the current URL of the driver. If present, the test passes.
-        self.assertIn("https://identity.hudl.com/u/login/password?", self.driver.current_url)
+        # Use self.assertIn to check the field validation error message returned is as expected
+        self.assertIn("Please fill in this field.", result)
+
+    #Test to ensure Edit link on username field in the password entry flow step is working as expected
+    def test_login_edit_email(self):
+        # Initialize a LoginPage object with the self.driver attribute
+        login_page = LoginPage(self.driver)
+        
+        # Call the login_with_valid_user method on the login_page object
+        login_page.edit_email()
+        
+        # Use self.assertIn to check if the resulting navigation from login action is to the expected URL.
+        self.assertIn("https://identity.hudl.com/u/login/identifier?", self.driver.current_url)
 
     # Test the Create Account link on the login page.
     def test_create_account_link(self):
