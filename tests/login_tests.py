@@ -19,8 +19,7 @@ class TestLogin(BaseTest):
         # Call the login_with_valid_user method on the login_page object
         login_page.login_with_valid_credentials()
         
-        # Use self.assertIn to check if the string "logged-in-successfully"
-        # is present in the current URL of the driver. If present, the test passes.
+        # Use self.assertIn to check if the resulting navigation from login action is to the expected URL.
         self.assertIn("https://identity.hudl.com/authorize/resume?", self.driver.current_url)
 
 
