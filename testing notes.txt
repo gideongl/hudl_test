@@ -1,0 +1,4 @@
+1. URL state parameter, assuming it's for CSRF protection, but details of testing seem outside current testing scope, given time constraints and documentation provided
+2. empty email/password submission attempt error messages aren't accessible to me in the page source so will check that the page doesn't navigate to the password input step or logged in pages but cannot check error text explicitly
+3. Edit link in the username field when in password entry phase isn't locatable by me using standard Selenium Methods, haven't added test cases for its function
+4. Lots of hidden objects in the page source that are not immediately comprehensible to me, so will not attempt to test around those things
