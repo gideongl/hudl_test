@@ -1,4 +1,5 @@
 from ..utils.locators import LoginPageLocators
+from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -60,7 +61,7 @@ class LoginPage (object):
         self.login(VALID_USERNAME, VALID_PASSWORD)
 
     # Method to get the email address validation error message for the username field
-    def get_username_error_message(self):
+    def get_email_validation_error_message(self):
         #fill out the username with an invalid email address
         self.fill_username(INVALID_EMAIL)
         #click the continue button
@@ -71,7 +72,7 @@ class LoginPage (object):
         return self.driver.find_element(*self.locator.EMAIL_FIELD_ERROR).text
     
         # Method to get the invalid username/password error because of a non-existent username
-    def get_username_error_message(self):
+    def get_nonexistent_username_error_message(self):
         #fill out the username with an invalid email address
         self.fill_username(VALID_EMAIL_NONUSERNAME)
        #click the continue button
@@ -86,7 +87,7 @@ class LoginPage (object):
         return self.driver.find_element(*self.locator.PASSWORD_FIELD_ERROR).text
     
     # Method to get the invalid username/password error because of an incorrect password
-    def get_username_error_message(self):
+    def get_incorrect_password_error_message(self):
         #fill out the username with an invalid email address
         self.fill_username(VALID_USERNAME) 
         #click the continue button
@@ -101,66 +102,135 @@ class LoginPage (object):
         return self.driver.find_element(*self.locator.PASSWORD_FIELD_ERROR).text
     
     
-    # Method to get the error message for the password field
-    def get_password_error_message(self):
+    # TODO Method to get the error message for a missing username field upon submission
+    def empty_username_field_error(self):
         #fill out the username with an invalid email address
-        self.fill_username(VALID_EMAIL_NONUSERNAME)
-        #click the continue button
-        self.click_continue_button()
-        #fill resulting password field with an invalid password
-        self.fill_password(INVALID_PASSWORD)
+        self.fill_username('')
         #click the continue button
         self.click_continue_button()
         #wait for the element to be present
-        self.wait_for_element(self.locator.EMAIL_FIELD_ERROR)
-        #find the element and return the text
-        return self.driver.find_element(*self.locator.PASSWORD_FIELD_ERROR).text
+        self.wait_for_element(self.locator.CONTINUE_BUTTON)
+        #find the element and return the text of error, still TODO
+#        return self.driver.find_element(*self.locator.MISSING_USERNAME_FIELD_ERROR).text
+
+    # TODO Method to get the error message for a missing password field upon submission
+    def empty_password_field_error(self):
+        #fill out the username with an invalid email address
+        self.fill_username(VALID_USERNAME) 
+        #click the continue button
+        self.click_continue_button()
+        #fill resulting password field with an invalid password
+        self.fill_password('')
+        #click the continue button
+        self.click_continue_button()
+        #wait for the element to be present
+        self.wait_for_element(self.locator.CONTINUE_BUTTON)
+        #find the element and return the text of error, still TODO
+#        return self.driver.find_element(*self.locator.MISSING_PASSWORD_FIELD_ERROR).text
     
 
-    # Method to click the create account link
-    def click_create_account(self):
+    # Method to click the create account link (https://identity.hudl.com/u/signup/identifier?)
+    def click_create_account_link(self):
         #wait for the element to be present
         self.wait_for_element(self.locator.CREATE_ACCOUNT_LINK)
         #find the element and click it
         self.driver.find_element(*self.locator.CREATE_ACCOUNT_LINK).click()
 
-    # Method to click the forgot password link
-    def click_forgot_password(self):
+    # Method to click the forgot password link (https://identity.hudl.com/u/reset-password/request/prod-hudl-users-terraform?)
+    def click_forgot_password_link(self):
+        #fill out the username with an valid email address
+        self.fill_username(VALID_EMAIL_NONUSERNAME) 
+        #click the continue button
+        self.click_continue_button()
         #wait for the element to be present
         self.wait_for_element(self.locator.FORGOT_PASSWORD_LINK)
         #find the element and click it
         self.driver.find_element(*self.locator.FORGOT_PASSWORD_LINK).click()
 
-    # Method to click the privacy policy link (https://www.hudl.com/privacy)
-    def click_privacy_policy(self):
+    # Method to click the privacy policy link (https://www.hudl.com/privacy) added logic to gracefully handle link opening in new tab
+    def click_privacy_policy_link(self):
+        # Setup wait for later
+        wait = WebDriverWait(self.driver, 10)
         #wait for the element to be present
         self.wait_for_element(self.locator.PRIVACY_POLICY_LINK)
+        # Store the ID of the original window
+        original_window = self.driver.current_window_handle
+
+        # Check we don't have other windows open already
+        assert len(self.driver.window_handles) == 1
+
+        # Click the link which opens in a new window
         #find the element and click it
         self.driver.find_element(*self.locator.PRIVACY_POLICY_LINK).click()
 
+        # Wait for the new window or tab
+        wait.until(EC.number_of_windows_to_be(2))
+
+        # Loop through until we find a new window handle
+        for window_handle in self.driver.window_handles:
+            if window_handle != original_window:
+                self.driver.switch_to.window(window_handle)
+                break
+
+        # Wait for the new tab to finish loading content
+        wait.until(EC.title_is("Hudl Privacy Policy"))
+        #Close the tab or window
+        self.driver.close()
+
+        #Switch back to the old tab or window
+        self.driver.switch_to.window(original_window)
+
+        
+
     # Method to click the terms of service link (https://www.hudl.com/terms)
-    def click_terms_of_service(self):
+    def click_terms_of_service_link(self):
+        # Setup wait for later
+        wait = WebDriverWait(self.driver, 10)
         #wait for the element to be present
         self.wait_for_element(self.locator.TOS_LINK)
+        # Store the ID of the original window
+        original_window = self.driver.current_window_handle
+
+        # Check we don't have other windows open already
+        assert len(self.driver.window_handles) == 1
+
+        # Click the link which opens in a new window
         #find the element and click it
         self.driver.find_element(*self.locator.TOS_LINK).click()
 
-    # Method to click the google sign in button
-    def click_google_sign_in(self):
+        # Wait for the new window or tab
+        wait.until(EC.number_of_windows_to_be(2))
+
+        # Loop through until we find a new window handle
+        for window_handle in self.driver.window_handles:
+            if window_handle != original_window:
+                self.driver.switch_to.window(window_handle)
+                break
+
+        # Wait for the new tab to finish loading content
+        wait.until(EC.title_is("Hudl Site Terms"))
+        #Close the tab or window
+        self.driver.close()
+
+        #Switch back to the old tab or window
+        self.driver.switch_to.window(original_window)
+
+    # Method to click the google sign in button ()
+    def click_google_sign_in_button(self):
         #wait for the element to be present
         self.wait_for_element(self.locator.GOOGLE_SSO_BUTTON)
         #find the element and click it
         self.driver.find_element(*self.locator.GOOGLE_SSO_BUTTON).click()
 
-    # Method to click the facebook sign in button
-    def click_facebook_sign_in(self):
+    # Method to click the facebook sign in button ()
+    def click_facebook_sign_in_button(self):
         #wait for the element to be present
         self.wait_for_element(self.locator.FACEBOOK_SSO_BUTTON)
         #find the element and click it
         self.driver.find_element(*self.locator.FACEBOOK_SSO_BUTTON).click() 
     
-    # Method to click the apple sign in button
-    def click_apple_sign_in(self):
+    # Method to click the apple sign in button ()
+    def click_apple_sign_in_button(self):
         #wait for the element to be present
         self.wait_for_element(self.locator.APPLE_SSO_BUTTON)
         #find the element and click it
