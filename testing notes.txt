@@ -1,7 +1,18 @@
+This exercise was fun and interesting to me, mostly because I was using a new language and tool stack than I've used previously (my Selenium experience has been scattered, not 
+terribly recent and mostly under java in the long ago). Whole thing took me more like 20 hours than 2, but a lot of that was spent on environment setup and learning/relearning 
+with the new tools. I hope my judgement on the desired scope of testing was reasonable. I focused on the login function itself, and the page that hosts it. 
+
+I did follow a POM design pattern for the most part, but I skimped here and there where navigations took me outside the page under test. Given that none of my test scenarious 
+involved more complex interactions with those additional pages, I thought that was a reasonable compromise. 
+
+Below are a few odds and ends about various testing decisions and one 'Bug'.
+
 1. URL state parameter, assuming it's for CSRF protection, but details of testing seem outside current testing scope given time constraints and documentation provided
-2. Lots of hidden objects in the page source that are not immediately comprehensible to me, so will not attempt to test around those things
-3. Incorrect email and incorrect password do not produce the same error message. This might be useful for people attempting hacking of the site...
-4. Script Injection check?
+2. Lots of objects in the page source that are not immediately comprehensible to me, so will not attempt to test around those things
+3. Incorrect email and incorrect password do not produce the same error message. This might be useful for people attempting hacking of the site... would probabyl report
+this as a design flaw if this were being done in earnest. 
+4. Script Injection check? Outside of current testing scope.
+
 
 
 run single tests with following command from hudl_test folder
