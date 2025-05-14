@@ -15,6 +15,8 @@ Contact Information: ggluckman@gmail.com
 
 To try it out...
 
+Make sure to update your credential information on the page file, .src/hudl_test/pages/login_page.py up at the top or tests will fail...
+
 Run single tests with following command from hudl_test folder
 $   python3 -m unittest tests.login_tests.TestLogin.test_login_with_valid_user
 

@@ -3,10 +3,10 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-VALID_USERNAME = 'ggluckman@gmail.com'
+VALID_USERNAME = 'foo@foo.com' #replace foo@foo.com with working email if you want to run this.
 VALID_EMAIL_NONUSERNAME = 'test123@testing.test.com'
 INVALID_EMAIL = '2test@2.test.2'
-VALID_PASSWORD = 'LetsTest123!'
+VALID_PASSWORD = 'foo2'#replace foo2 with working password if you want to run this.
 INVALID_PASSWORD = '123'
 
 
