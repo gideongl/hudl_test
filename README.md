@@ -4,7 +4,7 @@ Project Title: Hudle Test
 Description: Exercise for hiring process
 
 Installation Instructions: 
-Built using venv, requirements.txt in the main folder is up to date
+Built using venv, requirements.txt in the main folder is up to date. 
 Runs only with Firefox driver (geckodriver-v0.36.0-win64.zip) for now, additional browsers should be easy to add but not within current scope
 
 License Information: Published Under MIT license because I needed something but I cannot imagine this being of interest to anyone else.
